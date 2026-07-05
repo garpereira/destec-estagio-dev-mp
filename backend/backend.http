@@ -1,6 +1,42 @@
 @backend_HostAddress = http://localhost:5109
 
-GET {{backend_HostAddress}}/weatherforecast/
+###
+
+GET {{backend_HostAddress}}/
 Accept: application/json
+
+###
+
+GET {{backend_HostAddress}}/pessoas
+Accept: application/json
+
+###
+
+POST {{backend_HostAddress}}/pessoas
+Content-type: application/json
+
+{
+  "nome": "Gabriel",
+  "idade": 29
+}
+
+###
+
+POST {{backend_HostAddress}}/pessoas
+Content-type: application/json
+
+{
+  "nome": "João",
+  "idade": 20
+}
+
+###
+
+GET {{backend_HostAddress}}/pessoas/1
+Accept: application/json
+
+###
+
+DELETE {{backend_HostAddress}}/pessoas/1
 
 ###
