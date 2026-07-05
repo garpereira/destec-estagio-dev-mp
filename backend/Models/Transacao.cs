@@ -4,7 +4,7 @@ namespace Models
   {
     public int Id {get; set;}
     public string Descricao {get; set;} = string.Empty;
-    public double Valor {get; set;} = default;
+    public decimal Valor {get; set;} = default;
     public string Tipo {get; set;} = string.Empty;
 
     //FK
