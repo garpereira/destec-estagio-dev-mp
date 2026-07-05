@@ -12,6 +12,11 @@ Accept: application/json
 
 ###
 
+GET {{backend_HostAddress}}/transacoes
+Accept: application/json
+
+###
+
 POST {{backend_HostAddress}}/pessoas
 Content-type: application/json
 
@@ -32,11 +37,79 @@ Content-type: application/json
 
 ###
 
+POST {{backend_HostAddress}}/pessoas
+Content-type: application/json
+
+{
+  "nome": "Ana",
+  "idade": 15
+}
+
+###
+
 GET {{backend_HostAddress}}/pessoas/1
 Accept: application/json
 
 ###
 
 DELETE {{backend_HostAddress}}/pessoas/1
+
+###
+
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Conta de Água",
+  "valor": 45.78,
+  "tipo": "Despesa",
+  "pessoaId": 2
+}
+
+###
+
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Mercado",
+  "valor": 350.70,
+  "tipo": "Despesa",
+  "pessoaId": 3
+}
+
+###
+
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Salário",
+  "valor": 3500,
+  "tipo": "Receita",
+  "pessoaId": 2
+}
+
+###
+
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Salário",
+  "valor": 1200,
+  "tipo": "Receita",
+  "pessoaId": 3
+}
+
+###
+
+GET {{backend_HostAddress}}/transacoes/1
+Accept: application/json
+
+###
+
+GET {{backend_HostAddress}}/transacoes/2
+Accept: application/json
 
 ###
