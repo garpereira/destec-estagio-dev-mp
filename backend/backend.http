@@ -1,22 +1,14 @@
 @backend_HostAddress = http://localhost:5109
 
-###
-
+### Status da API
 GET {{backend_HostAddress}}/
 Accept: application/json
 
-###
-
+### Listar pessoas
 GET {{backend_HostAddress}}/pessoas
 Accept: application/json
 
-###
-
-GET {{backend_HostAddress}}/transacoes
-Accept: application/json
-
-###
-
+### Criar pessoa Adulta
 POST {{backend_HostAddress}}/pessoas
 Content-type: application/json
 
@@ -25,106 +17,72 @@ Content-type: application/json
   "idade": 29
 }
 
-###
-
+### Criar pessoa menor de idade
 POST {{backend_HostAddress}}/pessoas
 Content-type: application/json
 
 {
   "nome": "João",
-  "idade": 20
+  "idade": 16
 }
 
-###
-
-POST {{backend_HostAddress}}/pessoas
-Content-type: application/json
-
-{
-  "nome": "Ana",
-  "idade": 15
-}
-
-###
-
+### Buscar pessoa por ID
 GET {{backend_HostAddress}}/pessoas/1
 Accept: application/json
 
-###
-
-DELETE {{backend_HostAddress}}/pessoas/1
-
-###
-
+### Criar receita para pessoa adulta
 POST {{backend_HostAddress}}/transacoes
 Content-Type: application/json
 
 {
-  "descricao": "Conta de Água",
-  "valor": 45.78,
-  "tipo": "Despesa",
-  "pessoaId": 2
+  "descricao": "Salário",
+  "valor": 1800,
+  "tipo": "receita",
+  "pessoaId": 1
 }
-
-###
-
+### Criar despesa para pessoa adulta
 POST {{backend_HostAddress}}/transacoes
-Content-Type: application/json
-
+Content-Type: application/json 
 {
   "descricao": "Mercado",
-  "valor": 350.70,
-  "tipo": "Despesa",
-  "pessoaId": 3
+  "valor": 250.90,
+  "tipo": "despesa",
+  "pessoaId": 1
 }
 
-###
-
+### Criar despesa para menor de idade
 POST {{backend_HostAddress}}/transacoes
 Content-Type: application/json
 
 {
-  "descricao": "Salário",
-  "valor": 3500,
-  "tipo": "Receita",
+  "descricao": "Lanche",
+  "valor": 30,
+  "tipo": "despesa",
   "pessoaId": 2
 }
 
-###
-
+### Tentativa inválida: receita para menor de idade
 POST {{backend_HostAddress}}/transacoes
 Content-Type: application/json
 
 {
-  "descricao": "Salário",
-  "valor": 1200,
-  "tipo": "Receita",
-  "pessoaId": 3
+  "descricao": "Mesada",
+  "valor": 100,
+  "tipo": "receita",
+  "pessoaId": 2
 }
 
-###
+### Listar transações
+GET {{backend_HostAddress}}/transacoes
+Accept: application/json
 
+### Buscar transação por ID
 GET {{backend_HostAddress}}/transacoes/1
 Accept: application/json
 
-###
-
-GET {{backend_HostAddress}}/transacoes/2
-Accept: application/json
-
-###
-
-DELETE {{backend_HostAddress}}/pessoas/3
-Accept: application/json
-
-###
-
+### Consultar totais
 GET {{backend_HostAddress}}/totais
 Accept: application/json
 
-###
-
-DELETE {{backend_HostAddress}}/pessoas/2
-Accept: application/json
-
-###
+### Deletar pessoa
+DELETE {{backend_HostAddress}}/pessoas/1
