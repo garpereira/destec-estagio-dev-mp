@@ -1,6 +1,5 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +46,7 @@ app.MapGet("/pessoas/{id}", async (int id, AppDbContext db) =>
     
     if (pessoa is null) // null se elemento nao for encontrado
     {
-        return Results.NotFound("Pessoa não encontrada!");
+        return Results.NotFound("Pessoa não encontrada.");
     }
     
     return Results.Ok(pessoa);
@@ -116,6 +115,65 @@ app.MapGet("/transacoes/{id}", async (int id, AppDbContext db) =>
     return Results.Ok(transacao);
 });
 
+app.MapGet("/totais", async (AppDbContext db) =>
+{
+   // Queremos listar todas as pessoas cadastradas, exibir total de receitas, despesas, saldo
+   // Exibir total geral
+
+   /* A logica para somar os valores de cada pessoa, foi pesquisar no banco de dados
+   tabela Pessoas e Transacoes utilizando LINQ, que é como se estivessemos fazendo uma query
+   dentro do SQL. Portanto, busco as informacoes de cada pessoa, enquanto 
+   faço o somatório dos valores de receita e despesa onde seus tipos são equivalentes.
+   */
+    var pessoas = await db.Pessoas
+        .AsNoTracking()
+        .Select(pessoa => new
+        {
+            pessoa.Id,
+            pessoa.Nome,
+            pessoa.Idade,
+            pessoa.Maioridade,
+
+            TotalReceitas = db.Transacoes
+                .Where(transacao => transacao.Tipo == "receita")
+                .Sum(transacao => transacao.Valor),
+            
+            TotalDespesas = pessoa.Transacoes
+            .Where(transacao => transacao.Tipo == "despesa")
+            .Sum(transacao => transacao.Valor)
+        })
+        .ToListAsync();
+
+    // Aqui eu só quis dividir um pouco a tarefa das variaveis para deixar mais legível
+    var pessoasComSaldo = pessoas
+        .Select(pessoa => new
+        {
+           pessoa.Id,
+           pessoa.Nome,
+           pessoa.Idade,
+           pessoa.TotalReceitas,
+           pessoa.TotalDespesas,
+           Saldo = pessoa.TotalReceitas - pessoa.TotalDespesas 
+        })
+        .ToList();
+
+    var totalGeralReceitas = pessoasComSaldo.Sum(pessoa => pessoa.TotalReceitas);
+    var totalGeralDespesas = pessoasComSaldo.Sum(pessoa => pessoa.TotalDespesas);
+
+    var response = new
+    {
+        Pessoas = pessoasComSaldo,
+        TotalGeral = new
+        {
+            TotalReceitas = totalGeralReceitas,
+            TotalDespesas = totalGeralDespesas,
+            SaldoLiquido = totalGeralReceitas - totalGeralDespesas
+        }
+    };
+
+    return Results.Ok(response);
+});
+
 // POSTS
 app.MapPost("/pessoas", async (Pessoa pessoa, AppDbContext db) => 
 {
@@ -128,10 +186,16 @@ app.MapPost("/pessoas", async (Pessoa pessoa, AppDbContext db) =>
         return Results.BadRequest("Idade não pode ser negativa (a nao ser que você seja um viajante no tempo).");
     }
     
-
     db.Pessoas.Add(pessoa);
     await db.SaveChangesAsync();
-    return Results.Created($"/pessoas/{pessoa.Id}", pessoa);
+
+    var response = new
+    {
+        pessoa.Id,
+        pessoa.Nome,
+        pessoa.Idade
+    };
+    return Results.Created($"/pessoas/{response.Id}", response);
 });
 
 app.MapPost("/transacoes", async (Transacao transacao, AppDbContext db) =>
@@ -175,7 +239,22 @@ app.MapPost("/transacoes", async (Transacao transacao, AppDbContext db) =>
     db.Transacoes.Add(transacao);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/transacoes/{transacao.Id}", transacao);
+    var response = new
+    {
+        transacao.Id,
+        transacao.Descricao,
+        transacao.Valor,
+        transacao.Tipo,
+        transacao.PessoaId,
+        Pessoa = new
+        {
+            pessoa.Id,
+            pessoa.Nome,
+            pessoa.Idade
+        }
+    };
+
+    return Results.Created($"/transacoes/{response.Id}", response);
 });
 
 

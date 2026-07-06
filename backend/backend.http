@@ -113,3 +113,18 @@ GET {{backend_HostAddress}}/transacoes/2
 Accept: application/json
 
 ###
+
+DELETE {{backend_HostAddress}}/pessoas/3
+Accept: application/json
+
+###
+
+GET {{backend_HostAddress}}/totais
+Accept: application/json
+
+###
+
+DELETE {{backend_HostAddress}}/pessoas/2
+Accept: application/json
+
+###
