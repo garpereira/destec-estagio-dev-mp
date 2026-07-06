@@ -135,11 +135,11 @@ app.MapGet("/totais", async (AppDbContext db) =>
             pessoa.Maioridade,
 
             TotalReceitas = db.Transacoes
-                .Where(transacao => transacao.Tipo == "receita")
+                .Where(transacao => transacao.Tipo == "receita" && transacao.PessoaId == pessoa.Id)
                 .Sum(transacao => transacao.Valor),
             
             TotalDespesas = pessoa.Transacoes
-            .Where(transacao => transacao.Tipo == "despesa")
+            .Where(transacao => transacao.Tipo == "despesa" && transacao.PessoaId == pessoa.Id)
             .Sum(transacao => transacao.Valor)
         })
         .ToListAsync();
@@ -157,12 +157,12 @@ app.MapGet("/totais", async (AppDbContext db) =>
         })
         .ToList();
 
-    var totalGeralReceitas = pessoasComSaldo.Sum(pessoa => pessoa.TotalReceitas);
-    var totalGeralDespesas = pessoasComSaldo.Sum(pessoa => pessoa.TotalDespesas);
+    var totalGeralReceitas = pessoas.Sum(pessoa => pessoa.TotalReceitas);
+    var totalGeralDespesas = pessoas.Sum(pessoa => pessoa.TotalDespesas);
 
     var response = new
     {
-        Pessoas = pessoasComSaldo,
+        Pessoas = pessoas,
         TotalGeral = new
         {
             TotalReceitas = totalGeralReceitas,
