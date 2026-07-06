@@ -1,6 +1,88 @@
 @backend_HostAddress = http://localhost:5109
 
-GET {{backend_HostAddress}}/weatherforecast/
+### Status da API
+GET {{backend_HostAddress}}/
 Accept: application/json
 
-###
+### Listar pessoas
+GET {{backend_HostAddress}}/pessoas
+Accept: application/json
+
+### Criar pessoa Adulta
+POST {{backend_HostAddress}}/pessoas
+Content-type: application/json
+
+{
+  "nome": "Gabriel",
+  "idade": 29
+}
+
+### Criar pessoa menor de idade
+POST {{backend_HostAddress}}/pessoas
+Content-type: application/json
+
+{
+  "nome": "João",
+  "idade": 16
+}
+
+### Buscar pessoa por ID
+GET {{backend_HostAddress}}/pessoas/1
+Accept: application/json
+
+### Criar receita para pessoa adulta
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Salário",
+  "valor": 1800,
+  "tipo": "receita",
+  "pessoaId": 1
+}
+### Criar despesa para pessoa adulta
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json 
+{
+  "descricao": "Mercado",
+  "valor": 250.90,
+  "tipo": "despesa",
+  "pessoaId": 1
+}
+
+### Criar despesa para menor de idade
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Lanche",
+  "valor": 30,
+  "tipo": "despesa",
+  "pessoaId": 2
+}
+
+### Tentativa inválida: receita para menor de idade
+POST {{backend_HostAddress}}/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Mesada",
+  "valor": 100,
+  "tipo": "receita",
+  "pessoaId": 2
+}
+
+### Listar transações
+GET {{backend_HostAddress}}/transacoes
+Accept: application/json
+
+### Buscar transação por ID
+GET {{backend_HostAddress}}/transacoes/1
+Accept: application/json
+
+### Consultar totais
+GET {{backend_HostAddress}}/totais
+Accept: application/json
+
+### Deletar pessoa
+DELETE {{backend_HostAddress}}/pessoas/1
