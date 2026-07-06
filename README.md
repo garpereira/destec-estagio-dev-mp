@@ -1,4 +1,64 @@
-# Desafio Estagio Técnico - Desenvolvimento
-Repositório com solução do desafio técnico para vaga de estágio de Desenvolvimento utilizando .Net, C#, React, TypeScript como tecnologias.
+# Controle de Gastos Residenciais
 
-O desafio consiste em criar uma aplicação web que permita o controle de gastos residenciais, com funcionalidade de cadastro de transações, pessoas e consulta de totais de gastos por pessoa e por categoria. A aplicação deve ser desenvolvida utilizando o framework .NET para o backend e React com TypeScript para o frontend.
+Aplicação web para controle de gastos residenciais, com cadastro de pessoas, cadastro de transações e consulta de totais por pessoa e geral.
+
+## Tecnologias
+
+- .NET
+- C#
+- Entity Framework Core
+- SQLite
+- React
+- TypeScript
+
+## Funcionalidades do Backend
+
+- Cadastro de pessoas
+- Listagem de pessoas
+- Busca de pessoa por ID
+- Remoção de pessoa
+- Cadastro de transações
+- Listagem de transações
+- Busca de transação por ID
+- Consulta de totais por pessoa
+- Consulta de total geral
+
+## Regras de Negócio
+
+- Pessoa possui nome e idade.
+- Transação possui descrição, valor, tipo e pessoa vinculada.
+- O tipo da transação deve ser `receita` ou `despesa`.
+- A pessoa informada na transação precisa existir.
+- Pessoas menores de 18 anos só podem ter transações do tipo `despesa`.
+- Ao remover uma pessoa, suas transações também são removidas.
+- O saldo é calculado por `total de receitas - total de despesas`.
+
+## Como Rodar o Backend
+
+Entre na pasta do backend:
+
+```bash
+cd backend
+```
+
+Restaure os pacotes:
+
+```bash
+dotnet restore
+```
+
+Aplique as migrations para criar o banco de dados:
+
+```bash
+dotnet ef database update
+```
+
+Rode a API:
+
+```bash
+dotnet run
+```
+A API estará disponível em `http://localhost:5109`.
+
+## Testando a API
+O arquivo `backend/backend.http` contém exemplos de requisições para testar os principais fluxos da aplicação.`
