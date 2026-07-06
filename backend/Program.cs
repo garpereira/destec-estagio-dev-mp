@@ -1,4 +1,5 @@
 using Data;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -145,25 +146,25 @@ app.MapGet("/totais", async (AppDbContext db) =>
         .ToListAsync();
 
     // Aqui eu só quis dividir um pouco a tarefa das variaveis para deixar mais legível
-    var pessoasComSaldo = pessoas
-        .Select(pessoa => new
+    var pessoasResponse = pessoas
+        .Select(pessoa => new TotalPessoaResponse
         {
-           pessoa.Id,
-           pessoa.Nome,
-           pessoa.Idade,
-           pessoa.TotalReceitas,
-           pessoa.TotalDespesas,
-           Saldo = pessoa.TotalReceitas - pessoa.TotalDespesas 
+           Id = pessoa.Id,
+           Nome = pessoa.Nome,
+           Idade = pessoa.Idade,
+           TotalReceitas = pessoa.TotalReceitas,
+           TotalDespesas = pessoa.TotalDespesas,
+           Saldo = pessoa.TotalReceitas - pessoa.TotalDespesas
         })
         .ToList();
 
     var totalGeralReceitas = pessoas.Sum(pessoa => pessoa.TotalReceitas);
     var totalGeralDespesas = pessoas.Sum(pessoa => pessoa.TotalDespesas);
 
-    var response = new
+    var response = new TotaisResponse
     {
-        Pessoas = pessoas,
-        TotalGeral = new
+        Pessoas = pessoasResponse,
+        TotalGeral = new ResumoGeralResponse
         {
             TotalReceitas = totalGeralReceitas,
             TotalDespesas = totalGeralDespesas,
@@ -175,54 +176,60 @@ app.MapGet("/totais", async (AppDbContext db) =>
 });
 
 // POSTS
-app.MapPost("/pessoas", async (Pessoa pessoa, AppDbContext db) => 
+app.MapPost("/pessoas", async (CriarpessoaRequest request, AppDbContext db) => 
 {
-    if (string.IsNullOrEmpty(pessoa.Nome))
+    if (string.IsNullOrEmpty(request.Nome))
     {
         return Results.BadRequest("O campo nome é obrigatório.");
     }
-    if (int.IsNegative(pessoa.Idade))
+    if (int.IsNegative(request.Idade))
     {
         return Results.BadRequest("Idade não pode ser negativa (a nao ser que você seja um viajante no tempo).");
     }
     
+    var pessoa = new Pessoa
+    {
+        Nome = request.Nome.Trim(),
+        Idade = request.Idade
+    };
+
     db.Pessoas.Add(pessoa);
     await db.SaveChangesAsync();
 
-    var response = new
+    var response = new PessoaResponse
     {
-        pessoa.Id,
-        pessoa.Nome,
-        pessoa.Idade
+        Id = pessoa.Id,
+        Nome = pessoa.Nome,
+        Idade = pessoa.Idade,
+        Maioridade = pessoa.Maioridade
     };
     return Results.Created($"/pessoas/{response.Id}", response);
 });
 
-app.MapPost("/transacoes", async (Transacao transacao, AppDbContext db) =>
+app.MapPost("/transacoes", async (CriarTransacaoRequest request, AppDbContext db) =>
 {
-    if (string.IsNullOrEmpty(transacao.Descricao.Trim()))
+    if (string.IsNullOrEmpty(request.Descricao.Trim()))
     {
         return Results.BadRequest("A descrição da transação é obrigatória.");
     }
-    if (transacao.Valor <= 0)
+    if (request.Valor <= 0)
     {
         return Results.BadRequest("O valor da transação deve ser maior que zero.");
     }
-    if (string.IsNullOrEmpty(transacao.Tipo))
+    if (string.IsNullOrEmpty(request.Tipo))
     {
         return Results.BadRequest("O tipo da transação deve ser 'receita' ou 'despesa'.");
     }
 
     // Verificar se PessoaId esta cadastrada pelo Id inserido na transacao
-    var pessoa = await db.Pessoas
-        .FirstOrDefaultAsync(pessoa => pessoa.Id == transacao.PessoaId);
+    var pessoa = await db.Pessoas.FindAsync(request.PessoaId);
+        
+    string tipo = request.Tipo.Trim().ToLower();
     
     if (pessoa is null)
     {
         return Results.BadRequest("A pessoa informada não existe.");
     }
-
-    string tipo = transacao.Tipo.Trim().ToLower();
 
     if (!tipo.Equals("receita") && !tipo.Equals("despesa"))
     {
@@ -235,22 +242,30 @@ app.MapPost("/transacoes", async (Transacao transacao, AppDbContext db) =>
         return Results.BadRequest("Menores de idade podem inserir apenas despesas.");
     }
 
-    transacao.Tipo = tipo;
+    var transacao = new Transacao
+    {
+        Descricao = request.Descricao.Trim(),
+        Valor = request.Valor,
+        Tipo = tipo,
+        PessoaId = request.PessoaId
+    };
+
     db.Transacoes.Add(transacao);
     await db.SaveChangesAsync();
 
-    var response = new
+    var response = new TransacaoResponse
     {
-        transacao.Id,
-        transacao.Descricao,
-        transacao.Valor,
-        transacao.Tipo,
-        transacao.PessoaId,
-        Pessoa = new
+        Id = transacao.Id,
+        Descricao = transacao.Descricao,
+        Valor = transacao.Valor,
+        Tipo = transacao.Tipo,
+        PessoaId = transacao.PessoaId,
+        Pessoa = new PessoaResponse
         {
-            pessoa.Id,
-            pessoa.Nome,
-            pessoa.Idade
+            Id = pessoa.Id,
+            Nome = pessoa.Nome,
+            Idade = pessoa.Idade,
+            Maioridade = pessoa.Maioridade
         }
     };
 
