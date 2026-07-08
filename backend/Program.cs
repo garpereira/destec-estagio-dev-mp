@@ -28,7 +28,8 @@ app.MapGet("/pessoas", async (AppDbContext db) =>
         {
             pessoa.Id,
             pessoa.Nome,
-            pessoa.Idade
+            pessoa.Idade,
+            pessoa.Maioridade
         })
         .ToListAsync();
     
@@ -197,6 +198,10 @@ app.MapPost("/pessoas", async (CriarpessoaRequest request, AppDbContext db) =>
     {
         return Results.BadRequest("Idade não pode ser negativa (a nao ser que você seja um viajante no tempo).");
     }
+    if (request.Idade == 0)
+    {
+        return Results.BadRequest("Idade não pode ser zero.");
+    }
     
     var pessoa = new Pessoa
     {
@@ -298,6 +303,6 @@ app.MapDelete("/pessoas/{id}", async (int id, AppDbContext db) =>
     db.Pessoas.Remove(pessoa);
     await db.SaveChangesAsync();
 
-    return Results.Accepted("Deletado com sucesso");
+    return Results.NoContent();
 });
 app.Run();
