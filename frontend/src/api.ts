@@ -6,9 +6,9 @@ import type{
   Transacao
 } from './types'
 
-const API_URL = 'http://localhost:5019'
+const API_URL = "http://localhost:5109"
 
-async function request<Transacao>(path: string, options?: RequestInit): Promise<Transacao>{
+async function request<T>(path: string, options?: RequestInit): Promise<T>{
   const response = await fetch(`${API_URL}${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ async function request<Transacao>(path: string, options?: RequestInit): Promise<
 
   // Se retornar sem conteúdo, não tem como ser retornado algo concreto como promise
   if (response.status == 204){
-    return undefined as Transacao
+    return undefined as T
   }
 
   return response.json()
