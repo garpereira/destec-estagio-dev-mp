@@ -62,3 +62,25 @@ A API estará disponível em `http://localhost:5109`.
 
 ## Testando a API
 O arquivo `backend/backend.http` contém exemplos de requisições para testar os principais fluxos da aplicação.`
+
+## Rodando o Frontend
+
+Entre na pasta do frontend:
+
+```bash
+cd frontend
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Em seguida rode a aplicação:
+
+```bash
+npm start
+```
+
+
