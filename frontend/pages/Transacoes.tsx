@@ -12,7 +12,7 @@ function Transacoes(){
   const [pessoaId, setPessoaId] = useState<number | "">("")
   const [pessoaSelecionada, setPessoaSelecionada] = useState<Pessoa | null>(null)
   const [descricao, setDescricao] = useState('')
-  const [tipo, setTipo] = useState<'receita' | 'despesa'>('receita')
+  const [tipo, setTipo] = useState<'receita' | 'despesa'>('despesa')
   const [valor, setValor] = useState('')
   const [transacoes, setTransacoes] = useState<Transacao[]>([])
   const [erro, setErro] = useState('')
