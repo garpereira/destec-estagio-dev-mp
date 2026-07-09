@@ -10,7 +10,6 @@ function TotalGeral(){
   const [totais, setTotais] = useState<Totais | null>(null)
   const [transacao, setTransacao] = useState<Transacao[] | null>([])
   const [erro, setErro] = useState('')
-  const [mensagem, setMensagem] = useState('')
   const [carregando, setCarregando] = useState(false)
 
   const formatoMoeda = new Intl.NumberFormat('pt-BR', {
@@ -80,6 +79,11 @@ async function handleListarTransacoes(){
           </div>
         </div>
         <section className="mt-8 m-8 mr-8 ml-8 md:mx-auto max-w-5xl">
+          {erro && (
+            <div className="mb-4 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">
+              {erro}
+            </div>
+          )}
           <div className="flex place-items-center gap-2 mb-4">
             <Users size={24} className="text-slate-600" />
             <h2 className="text-lg font-semibold uppercase tracking-wide text-slate-600">
@@ -89,7 +93,11 @@ async function handleListarTransacoes(){
 
           <div className="overflow-hidden rounded-2xl bg-white shadow">
               {/* Se não tem transações, logo não há dados para exibir */}
-              {transacao?.length === 0 ? (
+              {carregando ? (
+                <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
+                  Carregando totais...
+                </div>
+              ) : transacao?.length === 0 ? (
                 <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
                   Nenhuma transação cadastrada.
                 </div>
