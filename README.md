@@ -63,6 +63,18 @@ A API estará disponível em `http://localhost:5109`.
 ## Testando a API
 O arquivo `backend/backend.http` contém exemplos de requisições para testar os principais fluxos da aplicação.`
 
+Rotas da API:
+- `GET /pessoas` - Listar pessoas
+- `GET /pessoas/{id}` - Buscar pessoa por ID
+- `GET /transacoes` - Listar transações
+- `GET /transacoes/{id}` - Buscar transação por ID
+- `GET /totais` - Consultar total geral
+
+- `POST /pessoas` - Cadastrar pessoa
+- `POST /transacoes` - Cadastrar transação
+
+- `DELETE /pessoas/{id}` - Remover pessoa
+
 ## Rodando o Frontend
 
 Entre na pasta do frontend:
