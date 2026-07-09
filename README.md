@@ -98,5 +98,5 @@ npm run build
 ## /Transacoes - Cadastro e listagem de transações
 [![Tela de cadastro e listagem de transações](./img/transacoes.png)](./img/transacoes.png)
 
-## /TotalGeral - Consulta de total geral
+## /Totais - Consulta de total geral
 [![Tela de consulta de total geral](./img/totais.png)](./img/totais.png)
