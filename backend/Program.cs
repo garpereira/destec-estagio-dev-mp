@@ -18,8 +18,19 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 app.UseCors("Frontend");
 
+Dictionary<string, string> listRoutes = new Dictionary<string, string> {
+    ["/pessoas"] = "Listar todas as pessoas cadastradas",
+    ["/pessoas/{id}"] = "Listar uma pessoa específica pelo ID, incluindo suas transações",
+    ["/transacoes"] = "Listar todas as transações cadastradas",
+    ["/transacoes/{id}"] = "Listar uma transação específica pelo ID, incluindo a pessoa associada",
+    ["/totais"] = "Listar todas as pessoas com seus totais de receitas, despesas e saldo, além do total geral",
+    ["/pessoas (POST)"] = "Cadastrar uma nova pessoa",
+    ["/transacoes (POST)"] = "Cadastrar uma nova transação",
+    ["/pessoas/{id} (DELETE)"] = "Deletar uma pessoa pelo ID"
+};
+
 // GETS
-app.MapGet("/", () => "API rodando!");
+app.MapGet("/", () => $"API rodando!\n\nRotas disponíveis:\n{string.Join("\n", listRoutes.Select(route => $"{route.Key} - {route.Value}"))}");
 app.MapGet("/pessoas", async (AppDbContext db) =>
 {
     var pessoas = await db.Pessoas
