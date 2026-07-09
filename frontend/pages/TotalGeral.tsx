@@ -104,7 +104,7 @@ async function handleListarTransacoes(){
               ) : (
                 
                 <table className="w-full border-collapse">
-                  <thead className="bg-slate-100">
+                  <thead className="bg-slate-800/10">
                     <tr>
                       <th className="p-4 text-left text-sm font-semibold text-slate-600">
                         Pessoa
