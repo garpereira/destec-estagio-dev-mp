@@ -79,8 +79,13 @@ npm install
 
 Em seguida rode a aplicação:
 
+Localmente, a aplicação estará disponível em `http://localhost:5173`.
 ```bash
-npm start
+npm run dev
 ```
 
+Para rodar em ambiente de produção, utilize:
 
+```bash
+npm run build
+```
