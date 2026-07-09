@@ -137,7 +137,11 @@ function Pessoas(){
           </div>
 
           <div className="space-y-3">
-            {pessoas.length === 0 ? (
+            {carregando ? (
+              <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
+                Carregando pessoas...
+              </div>
+            ) : pessoas.length === 0 ? (
               <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
                 Nenhuma pessoa cadastrada.
               </div>
