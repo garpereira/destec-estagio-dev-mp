@@ -58,7 +58,7 @@ function Transacoes(){
       setTipo('receita')
       setValor('')
       setMensagem('Transação cadastrada com sucesso.')
-      await listarTransacoes()
+      await handleListarTransacoes()
     } catch (error) {
       setErro(error instanceof Error ? error.message : 'Erro ao cadastrar transação.')
     }
@@ -202,7 +202,11 @@ function Transacoes(){
           </div>
 
           <div className="space-y-3">
-            {transacoes.length === 0 ? (
+            {carregando ? (
+              <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
+                Carregando transações...
+              </div>
+            ) : transacoes.length === 0 ? (
               <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500">
                 Nenhuma transação cadastrada.
               </div>
